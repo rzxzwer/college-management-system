@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Информация о студенте</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>ФИО:</strong></div>
+                        <div class="col-sm-9">{{ student.user.get_full_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Отдел:</strong></div>
+                        <div class="col-sm-9">{{ student.department.name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Курс:</strong></div>
+                        <div class="col-sm-9">{{ student.course }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Группа:</strong></div>
+                        <div class="col-sm-9">{{ student.group }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Средний балл:</strong></div>
+                        <div class="col-sm-9">{{ student.average_score }}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <a href="{% url 'student_update' student.pk %}" class="btn btn-primary">Редактировать</a>
+                        <a href="{% url 'student_delete' student.pk %}" class="btn btn-danger">Удалить</a>
+                        <a href="{% url 'student_list' %}" class="btn btn-secondary">Назад к списку</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

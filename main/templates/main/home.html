@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4">Добро пожаловать в систему управления колледжем</h1>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Отделы</h5>
+                    <p class="card-text">Управление отделами колледжа</p>
+                    <a href="{% url 'department_list' %}" class="btn btn-primary">Перейти к отделам</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Студенты</h5>
+                    <p class="card-text">Управление студентами</p>
+                    <a href="{% url 'student_list' %}" class="btn btn-primary">Перейти к студентам</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Персонал</h5>
+                    <p class="card-text">Управление персоналом</p>
+                    <a href="{% url 'staff_list' %}" class="btn btn-primary">Перейти к персоналу</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
