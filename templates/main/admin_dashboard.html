@@ -1,0 +1,164 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">Панель управления администратора</h2>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Студенты</h5>
+                    <h2 class="card-text">{{ total_students }}</h2>
+                    <a href="{% url 'student-list' %}" class="text-white">Подробнее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Преподаватели</h5>
+                    <h2 class="card-text">{{ total_teachers }}</h2>
+                    <a href="{% url 'staff-list' %}" class="text-white">Подробнее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Отделы</h5>
+                    <h2 class="card-text">{{ total_departments }}</h2>
+                    <a href="{% url 'department-list' %}" class="text-white">Подробнее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Средний балл</h5>
+                    <h2 class="card-text">{{ average_score }}</h2>
+                    <a href="{% url 'statistics' %}" class="text-white">Подробнее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Успеваемость по отделам</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="departmentPerformanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Распределение студентов по курсам</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="courseDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Последние действия</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Действие</th>
+                                    <th>Пользователь</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in recent_actions %}
+                                <tr>
+                                    <td>{{ action.date }}</td>
+                                    <td>{{ action.description }}</td>
+                                    <td>{{ action.user }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ action.status_color }}">
+                                            {{ action.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // График успеваемости по отделам
+    const departmentCtx = document.getElementById('departmentPerformanceChart').getContext('2d');
+    const departmentLabels = {{ department_labels|safe }};
+    const departmentScores = {{ department_scores|safe }};
+    
+    new Chart(departmentCtx, {
+        type: 'bar',
+        data: {
+            labels: departmentLabels,
+            datasets: [{
+                label: 'Средний балл',
+                data: departmentScores,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5
+                }
+            }
+        }
+    });
+
+    // График распределения по курсам
+    const courseCtx = document.getElementById('courseDistributionChart').getContext('2d');
+    const courseLabels = {{ course_labels|safe }};
+    const courseData = {{ course_data|safe }};
+    
+    new Chart(courseCtx, {
+        type: 'pie',
+        data: {
+            labels: courseLabels,
+            datasets: [{
+                data: courseData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+});
+</script>
+{% endblock %} 
